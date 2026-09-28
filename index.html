@@ -1132,7 +1132,7 @@
 
           if (ifsc === currentCode) continue;
 
-          const branchCity = String(data.CITY || data.CENTRE || data.DISTRICT || '').toUpperCase().trim();
+          const branchCity = String(data.CITY || '').toUpperCase().trim();
 
           if (branchCity === cityUpper) {
             branches.push({
