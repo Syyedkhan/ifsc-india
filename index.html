@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>IFSC India - Bank Branch Details</title>
+
+  <meta
+    name="description"
+    content="IFSC India - Find bank branch details by IFSC or MICR code. Get bank name, branch, address, city, district, state, MICR, SWIFT and NEFT/RTGS/IMPS/UPI details."
+  >
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #F5F3EF;
+      color: #2D2D2D;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5E5E5;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2D2D2D;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: #2563EB;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: #6B6B6B;
+      margin-left: auto;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #2D2D2D;
+    }
+
+    .hero p {
+      color: #6B6B6B;
+      font-size: 15px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-box input {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 18px;
+      font-size: 16px;
+      border: 2px solid #E5E5E5;
+      border-radius: 10px;
+      background: #FFFFFF;
+      outline: none;
+      transition: border-color 0.2s;
+      text-transform: uppercase;
+      font-family: inherit;
+    }
+
+    .search-box input:focus {
+      border-color: #2563EB;
+    }
+
+    .search-box button {
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      background: #2563EB;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .search-box button:hover {
+      background: #1D4ED8;
+    }
+
+    .search-box button:disabled {
+      background: #93C5FD;
+      cursor: not-allowed;
+    }
+
+    .search-hint {
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      margin-bottom: 28px;
+    }
+
+    .popular {
+      text-align: center;
+      font-size: 13px;
+      color: #6B6B6B;
+      margin-bottom: 32px;
+    }
+
+    .popular a {
+      color: #2563EB;
+      text-decoration: none;
+      margin: 0 4px;
+      cursor: pointer;
+    }
+
+    .popular a:hover {
+      text-decoration: underline;
+    }
+
+    .recent {
+      margin-bottom: 32px;
+    }
+
+    .recent-title {
+      text-align: center;
+      font-size: 13px;
+      color: #6B6B6B;
+      margin-bottom: 10px;
+    }
+
+    .recent-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .recent-item {
+      padding: 6px 14px;
+      background: #FFFFFF;
+      border: 1px solid #E5E5E5;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #2563EB;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .recent-item:hover {
+      background: #EFF6FF;
+      border-color: #BFDBFE;
+    }
+
+    .recent-clear {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #FECACA;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #DC2626;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .recent-clear:hover {
+      background: #FEF2F2;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #EDEDED;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ifsc-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2563EB;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+
+    .row {
+      display: flex;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0F0F0;
+      font-size: 15px;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .row-label {
+      width: 130px;
+      flex-shrink: 0;
+      color: #6B6B6B;
+      font-weight: 500;
+    }
+
+    .row-value {
+      flex: 1;
+      color: #2D2D2D;
+      word-break: break-word;
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #F0F0F0;
+    }
+
+    .badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #DCFCE7;
+      color: #16A34A;
+    }
+
+    .badge.off {
+      background: #F3F4F6;
+      color: #9CA3AF;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .copy-btn {
+      padding: 8px 14px;
+      background: #F8FAFC;
+      color: #334155;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .copy-btn:hover {
+      background: #EFF6FF;
+      border-color: #BFDBFE;
+    }
+
+    .share-btn {
+      padding: 8px 14px;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      color: #FFFFFF;
+    }
+
+    .share-btn.whatsapp {
+      background: #25D366;
+      border-color: #25D366;
+    }
+
+    .share-btn.whatsapp:hover {
+      background: #1EBE57;
+    }
+
+    .share-btn.telegram {
+      background: #0088CC;
+      border-color: #0088CC;
+    }
+
+    .share-btn.telegram:hover {
+      background: #0077B3;
+    }
+
+    .share-btn.link {
+      background: #F8FAFC;
+      color: #334155;
+    }
+
+    .share-btn.link:hover {
+      background: #EFF6FF;
+      border-color: #BFDBFE;
+    }
+
+    .faq-section {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid #E5E5E5;
+    }
+
+    .faq-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1A1A1A;
+      margin-bottom: 24px;
+    }
+
+    .faq-item {
+      background: #FFFFFF;
+      border: 1px solid #E5E5E5;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .faq-item:hover {
+      border-color: #BFDBFE;
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 16px 20px;
+      background: transparent;
+      border: none;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1A1A1A;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .faq-question:hover {
+      background: #F8FAFC;
+    }
+
+    .faq-question::after {
+      content: '▼';
+      font-size: 10px;
+      color: #6B6B6B;
+      transition: transform 0.2s;
+    }
+
+    .faq-item.open .faq-question::after {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 20px;
+      color: #4B4B4B;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 500px;
+      padding: 0 20px 18px;
+    }
+
+    .error {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      color: #DC2626;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .info {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1D4ED8;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 32px;
+      color: #6B6B6B;
+      font-size: 15px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #E5E5E5;
+      border-top-color: #2563EB;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .flag-icon {
+      display: inline-block;
+      width: 20px;
+      height: 14px;
+      vertical-align: middle;
+      margin-right: 6px;
+      border-radius: 2px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 20px;
+      color: #6B6B6B;
+      font-size: 13px;
+      border-top: 1px solid #E5E5E5;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+
+      .hero h1 { font-size: 22px; }
+
+      .row { flex-direction: column; padding: 12px 0; }
+
+      .row-label { width: auto; margin-bottom: 4px; font-size: 13px; }
+
+      .card { padding: 18px; }
+
+      .search-box button { width: 100%; }
+
+      .tagline { display: none; }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <svg class="flag-icon" width="20" height="14" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">
+          <rect width="30" height="6.67" fill="#FF9933"/>
+          <rect y="6.67" width="30" height="6.67" fill="#FFFFFF"/>
+          <rect y="13.33" width="30" height="6.67" fill="#138808"/>
+          <circle cx="15" cy="10" r="2.2" fill="none" stroke="#000080" stroke-width="0.4"/>
+          <circle cx="15" cy="10" r="0.3" fill="#000080"/>
+        </svg>
+        IFSC <span>India</span>
+      </a>
+      <div class="tagline">Bank Branch Details</div>
+    </div>
+  </header>
+
+
+  <main>
+
+    <div class="hero">
+      <h1>Find IFSC Code</h1>
+      <p>
+        Get bank name, branch, address, city,
+        district, state, MICR, SWIFT and
+        NEFT / RTGS / IMPS / UPI details
+      </p>
+    </div>
+
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="ifscInput"
+        placeholder="Enter IFSC or MICR Code"
+        maxlength="11"
+        autocomplete="off"
+        aria-label="IFSC or MICR Code"
+      >
+      <button
+        id="searchBtn"
+        type="button"
+        onclick="searchIFSC()"
+        aria-label="Search IFSC"
+      >
+        🔍 Search
+      </button>
+    </div>
+
+
+    <div class="search-hint">
+      Enter 11-character IFSC code or 9-digit MICR code
+    </div>
+
+
+    <div class="recent" id="recentBox" style="display:none;">
+      <div class="recent-title">
+        🕐 Recent Searches
+      </div>
+      <div class="recent-list" id="recentList"></div>
+    </div>
+
+
+    <div id="result"></div>
+
+
+    <!-- FAQ SECTION -->
+
+    <section class="faq-section">
+
+      <h2 class="faq-title">
+        Frequently Asked Questions
+      </h2>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFAQ(this)">
+          What is IFSC Code?
+        </button>
+        <div class="faq-answer">
+          IFSC (Indian Financial System Code) is an 11-character alphanumeric code used to identify bank branches in India. It is used for NEFT, RTGS, IMPS and UPI transactions. First 4 characters represent the bank, 5th character is always "0", and last 6 characters represent the branch.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFAQ(this)">
+          How to find IFSC code on a cheque?
+        </button>
+        <div class="faq-answer">
+          The IFSC code is printed on the top-left corner of every cheque leaf, just above the bank branch address. It is also printed on the first page of your bank passbook.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFAQ(this)">
+          What is the difference between IFSC and MICR?
+        </button>
+        <div class="faq-answer">
+          IFSC is an 11-character alphanumeric code used for online electronic transactions (NEFT, RTGS, IMPS, UPI). MICR is a 9-digit numeric code printed on cheques using magnetic ink for faster cheque processing. IFSC is used for digital payments, MICR for physical cheque clearing.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFAQ(this)">
+          Where is MICR code on a cheque?
+        </button>
+        <div class="faq-answer">
+          The MICR code is printed at the bottom of a cheque leaf, along with the cheque number. It is a 9-digit number printed in a special magnetic ink font.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFAQ(this)">
+          What is SWIFT code?
+        </button>
+        <div class="faq-answer">
+          SWIFT (Society for Worldwide Interbank Financial Telecommunication) code is an 8 or 11-character code used for international money transfers between banks. It is also known as BIC (Bank Identifier Code). SWIFT is used for foreign remittances, while IFSC is used for domestic transactions.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFAQ(this)">
+          How to use IFSC code for money transfer?
+        </button>
+        <div class="faq-answer">
+          To transfer money via NEFT, RTGS, IMPS or UPI, you need to provide the recipient's IFSC code along with their account number. The IFSC code tells the banking system exactly which bank branch the money should be transferred to.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" type="button" onclick="toggleFAQ(this)">
+          Is IFSC code same for all branches of a bank?
+        </button>
+        <div class="faq-answer">
+          No. Every bank branch has its own unique IFSC code. The first 4 characters (bank code) are the same for all branches of the same bank, but the last 6 characters (branch code) are different for each branch.
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    <p>
+      <svg class="flag-icon" width="20" height="14" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">
+        <rect width="30" height="6.67" fill="#FF9933"/>
+        <rect y="6.67" width="30" height="6.67" fill="#FFFFFF"/>
+        <rect y="13.33" width="30" height="6.67" fill="#138808"/>
+        <circle cx="15" cy="10" r="2.2" fill="none" stroke="#000080" stroke-width="0.4"/>
+        <circle cx="15" cy="10" r="0.3" fill="#000080"/>
+      </svg>
+      IFSC India
+    </p>
+    <p style="margin-top:8px;">Data Source: IFSC Branch Database</p>
+  </footer>
+
+
+  <script>
+
+    /* =====================================================
+       CONFIG
+    ===================================================== */
+
+    const BANK_DATA_FOLDER = './by-bank/';
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const input = document.getElementById('ifscInput');
+    const btn = document.getElementById('searchBtn');
+    const resultDiv = document.getElementById('result');
+
+
+    /* =====================================================
+       CACHE
+    ===================================================== */
+
+    const bankCache = new Map();
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function clean(value) {
+      return String(value ?? '').trim();
+    }
+
+    function upper(value) {
+      return clean(value).toUpperCase();
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttribute(value) {
+      return String(value ?? '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function safeValue(value) {
+      const text = clean(value);
+      return text || '-';
+    }
+
+    function getBankCode(ifsc) {
+      return upper(ifsc).substring(0, 4);
+    }
+
+    function isValidIFSC(code) {
+      return /^[A-Z]{4}0[A-Z0-9]{6}$/.test(code);
+    }
+
+    function isValidMICR(code) {
+      return /^\d{9}$/.test(code);
+    }
+
+
+    /* =====================================================
+       URL UPDATE
+    ===================================================== */
+
+    function updateURL(code) {
+
+      if (!code) return;
+
+      const url = new URL(window.location.href);
+
+      url.searchParams.set('ifsc', code);
+
+      window.history.pushState(
+        { ifsc: code },
+        '',
+        url.toString()
+      );
+
+    }
+
+
+    /* =====================================================
+       CHECK URL ON PAGE LOAD
+    ===================================================== */
+
+    function checkURLForIFSC() {
+
+      const params =
+        new URLSearchParams(window.location.search);
+
+      const code = params.get('ifsc');
+
+      if (!code) return;
+
+      const upperCode = code.toUpperCase();
+
+      if (
+        isValidIFSC(upperCode) ||
+        isValidMICR(upperCode)
+      ) {
+
+        input.value = upperCode;
+
+        searchIFSC();
+
+      }
+
+    }
+
+
+    /* =====================================================
+       BROWSER BACK / FORWARD
+    ===================================================== */
+
+    window.addEventListener(
+      'popstate',
+      function() {
+
+        const params =
+          new URLSearchParams(window.location.search);
+
+        const code = params.get('ifsc');
+
+        if (!code) return;
+
+        const upperCode = code.toUpperCase();
+
+        if (
+          isValidIFSC(upperCode) ||
+          isValidMICR(upperCode)
+        ) {
+
+          input.value = upperCode;
+
+          searchIFSC();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       LOAD BANK DATA
+    ===================================================== */
+
+    async function loadBankData(bankCode) {
+
+      bankCode = upper(bankCode);
+
+      if (!bankCode) {
+        throw new Error('Invalid bank code');
+      }
+
+      if (bankCache.has(bankCode)) {
+        return bankCache.get(bankCode);
+      }
+
+      const url =
+        BANK_DATA_FOLDER +
+        encodeURIComponent(bankCode) +
+        '.json';
+
+      const response =
+        await fetch(url, { cache: 'force-cache' });
+
+      if (!response.ok) {
+        throw new Error('Bank data file not found: ' + bankCode);
+      }
+
+      const data = await response.json();
+
+      if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        throw new Error('Invalid bank JSON format');
+      }
+
+      bankCache.set(bankCode, data);
+
+      return data;
+
+    }
+
+
+    /* =====================================================
+       SEARCH BY MICR
+    ===================================================== */
+
+    async function searchByMICR(micrCode) {
+
+      btn.disabled = true;
+      btn.textContent = 'Searching...';
+
+      resultDiv.innerHTML = `
+        <div class="loading">
+          <span class="spinner"></span>
+          Searching MICR in all bank files...
+        </div>
+      `;
+
+      try {
+
+        const response = await fetch('./micr-index.json');
+
+        if (!response.ok) {
+          throw new Error('MICR index not found');
+        }
+
+        const micrIndex = await response.json();
+
+        const ifsc = micrIndex[micrCode];
+
+        if (!ifsc) {
+          throw new Error('MICR not found');
+        }
+
+        input.value = ifsc;
+
+        await searchIFSC();
+
+      }
+      catch (error) {
+
+        console.error('MICR Search Error:', error);
+
+        resultDiv.innerHTML = `
+          <div class="error">
+            ❌ MICR code not found in database.
+            <br><br>
+            Please check the code and try again.
+          </div>
+        `;
+
+        btn.disabled = false;
+        btn.textContent = '🔍 Search';
+
+      }
+
+    }
+
+
+    /* =====================================================
+       BADGE
+    ===================================================== */
+
+    function badge(label, enabled) {
+
+      return `
+        <span class="badge ${enabled ? '' : 'off'}">
+          ${escapeHTML(label)}
+          ${enabled ? '✓' : '✗'}
+        </span>
+      `;
+
+    }
+
+
+    /* =====================================================
+       RENDER RESULT
+    ===================================================== */
+
+    function renderResult(code, d) {
+
+      const bank = safeValue(d.BANK);
+      const branch = safeValue(d.BRANCH);
+      const address = safeValue(d.ADDRESS);
+      const city = safeValue(d.CITY);
+      const district = safeValue(d.DISTRICT);
+      const state = safeValue(d.STATE);
+      const contact = safeValue(d.CONTACT);
+      const micr = safeValue(d.MICR);
+      const centre = safeValue(d.CENTRE);
+      const swift = safeValue(d.SWIFT);
+      const iso = safeValue(d.ISO3166);
+
+      const html = `
+
+        <div class="card">
+
+          <div class="ifsc-title">
+            ${escapeHTML(code)}
+          </div>
+
+          <div class="row">
+            <div class="row-label">🏦 Bank</div>
+            <div class="row-value">${escapeHTML(bank)}</div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">📍 Branch</div>
+            <div class="row-value">${escapeHTML(branch)}</div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">🏠 Address</div>
+            <div class="row-value">${escapeHTML(address)}</div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">🏙️ City</div>
+            <div class="row-value">${escapeHTML(city)}</div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">🗺️ District</div>
+            <div class="row-value">${escapeHTML(district)}</div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">🏛️ State</div>
+            <div class="row-value">${escapeHTML(state)}</div>
+          </div>
+
+          ${
+            centre !== '-'
+              ? `
+                <div class="row">
+                  <div class="row-label">📌 Centre</div>
+                  <div class="row-value">${escapeHTML(centre)}</div>
+                </div>
+              `
+              : ''
+          }
+
+          <div class="row">
+            <div class="row-label">📞 Contact</div>
+            <div class="row-value">${escapeHTML(contact)}</div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">🔢 MICR</div>
+            <div class="row-value">${escapeHTML(micr)}</div>
+          </div>
+
+          ${
+            swift !== '-'
+              ? `
+                <div class="row">
+                  <div class="row-label">🌐 SWIFT</div>
+                  <div class="row-value">${escapeHTML(swift)}</div>
+                </div>
+              `
+              : ''
+          }
+
+          ${
+            iso !== '-'
+              ? `
+                <div class="row">
+                  <div class="row-label">🌍 ISO</div>
+                  <div class="row-value">${escapeHTML(iso)}</div>
+                </div>
+              `
+              : ''
+          }
+
+          <div class="badges">
+            ${badge('UPI', !!d.UPI)}
+            ${badge('NEFT', !!d.NEFT)}
+            ${badge('RTGS', !!d.RTGS)}
+            ${badge('IMPS', !!d.IMPS)}
+          </div>
+
+          <div class="card-actions">
+
+            <button
+              class="copy-btn"
+              type="button"
+              onclick="copyText('${escapeAttribute(code)}', 'IFSC code')"
+            >
+              📋 Copy IFSC
+            </button>
+
+            <button
+              class="copy-btn"
+              type="button"
+              onclick="copyText('${escapeAttribute(address)}', 'Address')"
+            >
+              📍 Copy Address
+            </button>
+
+            <button
+              class="share-btn whatsapp"
+              type="button"
+              onclick="shareWhatsApp('${escapeAttribute(code)}', '${escapeAttribute(bank)}', '${escapeAttribute(branch)}')"
+            >
+              📱 WhatsApp
+            </button>
+
+            <button
+              class="share-btn telegram"
+              type="button"
+              onclick="shareTelegram('${escapeAttribute(code)}', '${escapeAttribute(bank)}', '${escapeAttribute(branch)}')"
+            >
+              ✈️ Telegram
+            </button>
+
+            <button
+              class="share-btn link"
+              type="button"
+              onclick="copyShareLink('${escapeAttribute(code)}')"
+            >
+              🔗 Copy Link
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+      resultDiv.innerHTML = html;
+
+    }
+
+
+    /* =====================================================
+       COPY TEXT
+    ===================================================== */
+
+    async function copyText(text, label) {
+
+      if (!text || text === '-') {
+        showInfo('❌ ' + label + ' not available');
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showInfo('✅ ' + label + ' copied!');
+      }
+      catch (error) {
+        fallbackCopy(text, label);
+      }
+
+    }
+
+
+    /* =====================================================
+       SHARE WHATSAPP
+    ===================================================== */
+
+    function shareWhatsApp(code, bank, branch) {
+
+      const pageURL = window.location.origin +
+        window.location.pathname +
+        '?ifsc=' + encodeURIComponent(code);
+
+      const text =
+        '🏦 Bank: ' + bank + '\n' +
+        '📍 Branch: ' + branch + '\n' +
+        '🔢 IFSC: ' + code + '\n\n' +
+        'Details: ' + pageURL;
+
+      const url =
+        'https://wa.me/?text=' +
+        encodeURIComponent(text);
+
+      window.open(url, '_blank');
+
+    }
+
+
+    /* =====================================================
+       SHARE TELEGRAM
+    ===================================================== */
+
+    function shareTelegram(code, bank, branch) {
+
+      const pageURL = window.location.origin +
+        window.location.pathname +
+        '?ifsc=' + encodeURIComponent(code);
+
+      const text =
+        '🏦 Bank: ' + bank + '\n' +
+        '📍 Branch: ' + branch + '\n' +
+        '🔢 IFSC: ' + code;
+
+      const url =
+        'https://t.me/share/url?url=' +
+        encodeURIComponent(pageURL) +
+        '&text=' +
+        encodeURIComponent(text);
+
+      window.open(url, '_blank');
+
+    }
+
+
+    /* =====================================================
+       COPY SHARE LINK
+    ===================================================== */
+
+    async function copyShareLink(code) {
+
+      const pageURL = window.location.origin +
+        window.location.pathname +
+        '?ifsc=' + encodeURIComponent(code);
+
+      try {
+
+        await navigator.clipboard.writeText(pageURL);
+
+        showInfo('✅ Link copied!');
+
+      }
+      catch (error) {
+
+        fallbackCopy(pageURL, 'Link');
+
+      }
+
+    }
+
+
+    /* =====================================================
+       FALLBACK COPY
+    ===================================================== */
+
+    function fallbackCopy(text, label) {
+
+      const textarea = document.createElement('textarea');
+
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+        showInfo('✅ ' + label + ' copied!');
+      }
+      catch (error) {
+        showInfo('❌ Copy failed');
+      }
+
+      document.body.removeChild(textarea);
+
+    }
+
+
+    /* =====================================================
+       INFO
+    ===================================================== */
+
+    function showInfo(message) {
+
+      resultDiv.innerHTML = `
+        <div class="info">
+          ${escapeHTML(message)}
+        </div>
+      `;
+
+    }
+
+
+    /* =====================================================
+       QUICK SEARCH
+    ===================================================== */
+
+    function quickSearch(code) {
+
+      input.value = upper(code);
+      searchIFSC();
+
+    }
+
+
+    /* =====================================================
+       RECENT SEARCHES
+    ===================================================== */
+
+    const RECENT_KEY = 'ifsc_recent';
+    const RECENT_MAX = 8;
+
+
+    function getRecentSearches() {
+
+      try {
+
+        const data = localStorage.getItem(RECENT_KEY);
+
+        if (!data) return [];
+
+        const arr = JSON.parse(data);
+
+        return Array.isArray(arr) ? arr : [];
+
+      }
+      catch (error) {
+        return [];
+      }
+
+    }
+
+
+    function saveRecentSearch(code) {
+
+      if (!code) return;
+
+      code = code.toUpperCase();
+
+      let list = getRecentSearches();
+
+      list = list.filter(item => item !== code);
+
+      list.unshift(code);
+
+      list = list.slice(0, RECENT_MAX);
+
+      try {
+        localStorage.setItem(
+          RECENT_KEY,
+          JSON.stringify(list)
+        );
+      }
+      catch (error) {
+        console.error('Recent save failed:', error);
+      }
+
+      renderRecentSearches();
+
+    }
+
+
+    function renderRecentSearches() {
+
+      const box = document.getElementById('recentBox');
+      const list = document.getElementById('recentList');
+
+      if (!box || !list) return;
+
+      const items = getRecentSearches();
+
+      if (items.length === 0) {
+        box.style.display = 'none';
+        return;
+      }
+
+      box.style.display = 'block';
+
+      let html = '';
+
+      for (const code of items) {
+
+        html += `
+          <button
+            class="recent-item"
+            type="button"
+            onclick="quickSearch('${escapeAttribute(code)}')"
+          >
+            ${escapeHTML(code)}
+          </button>
+        `;
+
+      }
+
+      html += `
+        <button
+          class="recent-clear"
+          type="button"
+          onclick="clearRecentSearches()"
+        >
+          ✕ Clear
+        </button>
+      `;
+
+      list.innerHTML = html;
+
+    }
+
+
+    function clearRecentSearches() {
+
+      try {
+        localStorage.removeItem(RECENT_KEY);
+      }
+      catch (error) {
+        console.error(error);
+      }
+
+      renderRecentSearches();
+
+    }
+
+
+    /* =====================================================
+       FAQ TOGGLE
+    ===================================================== */
+
+    function toggleFAQ(button) {
+
+      const item = button.parentElement;
+
+      const wasOpen = item.classList.contains('open');
+
+      document
+        .querySelectorAll('.faq-item')
+        .forEach(function(el) {
+          el.classList.remove('open');
+        });
+
+      if (!wasOpen) {
+        item.classList.add('open');
+      }
+
+    }
+
+
+    /* =====================================================
+       INPUT HANDLING
+    ===================================================== */
+
+    input.addEventListener('input', function(e) {
+
+      let value = e.target.value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '')
+        .substring(0, 11);
+
+      if (value.length >= 5) {
+
+        const fifth = value.charAt(4);
+
+        if (fifth === 'O') {
+
+          value =
+            value.substring(0, 4) +
+            '0' +
+            value.substring(5);
+
+        }
+
+      }
+
+      e.target.value = value;
+
+    });
+
+
+    /* =====================================================
+       ENTER KEY
+    ===================================================== */
+
+    input.addEventListener('keydown', function(e) {
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchIFSC();
+      }
+
+    });
+
+
+    /* =====================================================
+       AUTO-SEARCH ON PASTE
+    ===================================================== */
+
+    input.addEventListener('paste', function() {
+
+      setTimeout(function() {
+
+        const code = input.value.trim();
+
+        if (
+          isValidIFSC(code) ||
+          isValidMICR(code)
+        ) {
+
+          searchIFSC();
+
+        }
+
+      }, 100);
+
+    });
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    async function searchIFSC() {
+
+      const code = input.value.trim().toUpperCase();
+
+      if (!code) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            Please enter an IFSC or MICR code.
+          </div>
+        `;
+        input.focus();
+        return;
+      }
+
+      /* ---- MICR CHECK (9 digits) ---- */
+
+      if (isValidMICR(code)) {
+        return searchByMICR(code);
+      }
+
+      /* ---- IFSC CHECK (11 chars) ---- */
+
+      if (!isValidIFSC(code)) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            ❌ Please enter a valid 11-character IFSC code
+            or 9-digit MICR code.
+            <br><br>
+            Example IFSC: <strong>SBIN0007895</strong>
+            <br>
+            Example MICR: <strong>110240444</strong>
+          </div>
+        `;
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Searching...';
+
+      resultDiv.innerHTML = `
+        <div class="loading">
+          <span class="spinner"></span>
+          Fetching bank branch details...
+        </div>
+      `;
+
+      try {
+
+        const bankCode = getBankCode(code);
+        const bankData = await loadBankData(bankCode);
+        const data = bankData[code];
+
+        if (!data) {
+          throw new Error('IFSC record not found');
+        }
+
+        renderResult(code, data);
+
+        updateURL(code);
+
+        saveRecentSearch(code);
+
+      }
+      catch (error) {
+
+        console.error('IFSC Search Error:', error);
+
+        resultDiv.innerHTML = `
+          <div class="error">
+            ❌ IFSC code not found in database.
+            <br><br>
+            Please check the code and try again.
+            <br><br>
+            <small>
+              Bank file:
+              <strong>
+                by-bank/${escapeHTML(getBankCode(code))}.json
+              </strong>
+            </small>
+          </div>
+        `;
+
+      }
+      finally {
+
+        btn.disabled = false;
+        btn.textContent = '🔍 Search';
+
+      }
+
+    }
+
+
+    /* =====================================================
+       INITIAL MESSAGE
+    ===================================================== */
+
+    resultDiv.innerHTML = `
+      <div class="info">
+        🔎 Enter an 11-character IFSC code
+        or 9-digit MICR code to find bank branch details.
+      </div>
+    `;
+
+    renderRecentSearches();
+
+    checkURLForIFSC();
+
+  </script>
+
+</body>
+
+</html>
