@@ -21,7 +21,7 @@
       box-sizing: border-box;
     }
 
-        body {
+    body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: #F5F3EF;
       color: #1A1A1A;
@@ -83,7 +83,7 @@
       color: #2D2D2D;
     }
 
-        .hero p {
+    .hero p {
       color: #4B4B4B;
       font-size: 15px;
       font-weight: 500;
@@ -136,7 +136,7 @@
       cursor: not-allowed;
     }
 
-        .search-hint {
+    .search-hint {
       text-align: center;
       color: #4B4B4B;
       font-size: 13px;
@@ -250,14 +250,14 @@
       border-bottom: none;
     }
 
-        .row-label {
+    .row-label {
       width: 130px;
       flex-shrink: 0;
       color: #4B4B4B;
       font-weight: 600;
     }
 
-        .row-value {
+    .row-value {
       flex: 1;
       color: #1A1A1A;
       font-weight: 500;
@@ -432,7 +432,7 @@
       font-size: 15px;
     }
 
-        .info {
+    .info {
       background: #EFF6FF;
       border: 1px solid #BFDBFE;
       color: #1D4ED8;
@@ -476,7 +476,7 @@
       box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
     }
 
-        footer {
+    footer {
       text-align: center;
       padding: 32px 20px;
       color: #4B4B4B;
@@ -1090,7 +1090,91 @@
 
       `;
 
-      resultDiv.innerHTML = html;
+      // Nearby branches section
+      const nearbyHtml = `
+        <div class="card" id="nearbyCard" style="display:none;">
+          <div class="ifsc-title" style="font-size:18px;">
+            🔗 Nearby Branches (Same City)
+          </div>
+          <div id="nearbyList"></div>
+        </div>
+      `;
+
+      resultDiv.innerHTML = html + nearbyHtml;
+
+      // Load nearby branches
+      loadNearbyBranches(getBankCode(code), city, code);
+
+    }
+
+
+    /* =====================================================
+       NEARBY BRANCHES
+    ===================================================== */
+
+    async function loadNearbyBranches(bankCode, city, currentCode) {
+
+      const nearbyCard = document.getElementById('nearbyCard');
+      const nearbyList = document.getElementById('nearbyList');
+
+      if (!nearbyCard || !nearbyList || !city || city === '-') {
+        return;
+      }
+
+      try {
+
+        const bankData = await loadBankData(bankCode);
+
+        const branches = [];
+        const cityUpper = city.toUpperCase().trim();
+
+        for (const [ifsc, data] of Object.entries(bankData)) {
+
+          if (ifsc === currentCode) continue;
+
+          const branchCity = String(data.CITY || '').toUpperCase().trim();
+
+          if (branchCity === cityUpper) {
+            branches.push({
+              ifsc: ifsc,
+              branch: data.BRANCH || '',
+              address: data.ADDRESS || ''
+            });
+          }
+
+          if (branches.length >= 10) break;
+
+        }
+
+        if (branches.length === 0) {
+          return;
+        }
+
+        let listHtml = '';
+
+        for (const b of branches) {
+
+          listHtml += `
+            <div class="row" style="cursor:pointer;" onclick="quickSearch('${escapeAttribute(b.ifsc)}')">
+              <div class="row-value">
+                <strong style="color:#2563EB;">${escapeHTML(b.ifsc)}</strong>
+                <br>
+                <span style="font-size:13px; color:#4B4B4B;">
+                  ${escapeHTML(b.branch)}
+                </span>
+              </div>
+            </div>
+          `;
+
+        }
+
+        nearbyList.innerHTML = listHtml;
+        nearbyCard.style.display = 'block';
+
+      }
+      catch (error) {
+        console.error('Nearby branches error:', error);
+      }
 
     }
 
