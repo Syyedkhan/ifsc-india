@@ -20,12 +20,15 @@
       box-sizing: border-box;
     }
 
-    body {
+        body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: #F5F3EF;
-      color: #2D2D2D;
-      line-height: 1.6;
+      color: #1A1A1A;
+      line-height: 1.7;
+      font-size: 15px;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     header {
@@ -79,9 +82,10 @@
       color: #2D2D2D;
     }
 
-    .hero p {
-      color: #6B6B6B;
+        .hero p {
+      color: #4B4B4B;
       font-size: 15px;
+      font-weight: 500;
     }
 
     .search-box {
@@ -131,10 +135,11 @@
       cursor: not-allowed;
     }
 
-    .search-hint {
+        .search-hint {
       text-align: center;
-      color: #777;
-      font-size: 12px;
+      color: #4B4B4B;
+      font-size: 13px;
+      font-weight: 500;
       margin-bottom: 28px;
     }
 
@@ -244,16 +249,17 @@
       border-bottom: none;
     }
 
-    .row-label {
+        .row-label {
       width: 130px;
       flex-shrink: 0;
-      color: #6B6B6B;
-      font-weight: 500;
+      color: #4B4B4B;
+      font-weight: 600;
     }
 
-    .row-value {
+        .row-value {
       flex: 1;
-      color: #2D2D2D;
+      color: #1A1A1A;
+      font-weight: 500;
       word-break: break-word;
     }
 
@@ -425,7 +431,7 @@
       font-size: 15px;
     }
 
-    .info {
+        .info {
       background: #EFF6FF;
       border: 1px solid #BFDBFE;
       color: #1D4ED8;
@@ -433,6 +439,7 @@
       border-radius: 12px;
       text-align: center;
       font-size: 14px;
+      font-weight: 500;
     }
 
     .loading {
@@ -468,11 +475,12 @@
       box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
     }
 
-    footer {
+        footer {
       text-align: center;
       padding: 32px 20px;
-      color: #6B6B6B;
+      color: #4B4B4B;
       font-size: 13px;
+      font-weight: 500;
       border-top: 1px solid #E5E5E5;
       margin-top: 40px;
     }
