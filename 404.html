@@ -347,7 +347,7 @@
 
 <header>
     <div class="header-inner">
-        <a href="/" class="logo">🇮🇳 IFSC <span>India</span></a>
+        <a href="/ifsc-india/" class="logo">🇮🇳 IFSC <span>India</span></a>
         <div class="tagline">Bank Branch Details</div>
     </div>
 </header>
@@ -386,6 +386,7 @@
 
 <script>
 const BANK_DATA_FOLDER = '/ifsc-india/by-bank/';
+const MICR_INDEX_PATH = '/ifsc-india/micr-index.json';
 const input = document.getElementById('ifscInput');
 const btn = document.getElementById('searchBtn');
 const resultDiv = document.getElementById('result');
@@ -430,7 +431,7 @@ function getIFSCFromURL() {
 function updateURL(code) {
     if (!code) return;
     // Path-based URL use karo — SEO ke liye
-    const newPath = '/' + code + '/';
+    const newPath = '/ifsc-india/' + code + '/';
     window.history.pushState({ ifsc: code }, '', newPath);
 }
 
@@ -454,7 +455,7 @@ async function searchByMICR(micrCode) {
     resultDiv.innerHTML = '<div class="loading"><span class="spinner"></span>Searching MICR...</div>';
 
     try {
-        const response = await fetch('//ifsc-india/micr-index.json');
+        const response = await fetch(MICR_INDEX_PATH);
         if (!response.ok) throw new Error('MICR index not found');
         const micrIndex = await response.json();
         const ifsc = micrIndex[micrCode];
@@ -587,19 +588,19 @@ async function copyText(text, label) {
 }
 
 function shareWhatsApp(code, bank, branch) {
-    const pageURL = window.location.origin + '/' + code + '/';
+    const pageURL = window.location.origin + '/ifsc-india/' + code + '/';
     const text = '🏦 Bank: ' + bank + '\n📍 Branch: ' + branch + '\n🔢 IFSC: ' + code + '\n\nDetails: ' + pageURL;
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
 }
 
 function shareTelegram(code, bank, branch) {
-    const pageURL = window.location.origin + '/' + code + '/';
+    const pageURL = window.location.origin + '/ifsc-india/' + code + '/';
     const text = '🏦 Bank: ' + bank + '\n📍 Branch: ' + branch + '\n🔢 IFSC: ' + code;
     window.open('https://t.me/share/url?url=' + encodeURIComponent(pageURL) + '&text=' + encodeURIComponent(text), '_blank');
 }
 
 async function copyShareLink(code) {
-    const pageURL = window.location.origin + '/' + code + '/';
+    const pageURL = window.location.origin + '/ifsc-india/' + code + '/';
     try {
         await navigator.clipboard.writeText(pageURL);
         showInfo('✅ Link copied!');
