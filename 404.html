@@ -385,7 +385,7 @@
 </footer>
 
 <script>
-const BANK_DATA_FOLDER = '/by-bank/';
+const BANK_DATA_FOLDER = '/ifsc-india/by-bank/';
 const input = document.getElementById('ifscInput');
 const btn = document.getElementById('searchBtn');
 const resultDiv = document.getElementById('result');
@@ -454,7 +454,7 @@ async function searchByMICR(micrCode) {
     resultDiv.innerHTML = '<div class="loading"><span class="spinner"></span>Searching MICR...</div>';
 
     try {
-        const response = await fetch('/micr-index.json');
+        const response = await fetch('//ifsc-india/micr-index.json');
         if (!response.ok) throw new Error('MICR index not found');
         const micrIndex = await response.json();
         const ifsc = micrIndex[micrCode];
