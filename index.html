@@ -51,7 +51,6 @@
       margin-left: auto;
     }
 
-    /* 2-COLUMN LAYOUT */
     .container {
       max-width: 1100px;
       margin: 0 auto;
@@ -69,7 +68,6 @@
       top: 80px;
     }
 
-    /* HERO */
     .hero {
       text-align: center;
       margin-bottom: 24px;
@@ -86,7 +84,6 @@
       font-size: 14px;
     }
 
-    /* SEARCH */
     .search-box {
       display: flex;
       gap: 10px;
@@ -134,7 +131,6 @@
       margin-bottom: 24px;
     }
 
-    /* RECENT */
     .recent { margin-bottom: 24px; }
 
     .recent-title {
@@ -179,7 +175,6 @@
       font-family: inherit;
     }
 
-    /* RESULT */
     #result { margin-top: 20px; }
 
     .card {
@@ -205,7 +200,6 @@
       letter-spacing: 1px;
     }
 
-    /* MICR + SWIFT side by side */
     .row-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -313,7 +307,6 @@
     .share-btn.telegram { background: #0088CC; border-color: #0088CC; }
     .share-btn.link { background: #F8FAFC; color: #334155; }
 
-    /* NEARBY */
     .nearby-card {
       background: #FFFFFF;
       border: 1px solid #EDEDED;
@@ -354,7 +347,6 @@
       font-size: 12px;
     }
 
-    /* FAQ */
     .faq-section {
       margin-top: 32px;
       padding-top: 24px;
@@ -459,9 +451,8 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* AD SLOTS - COMMENT MEIN HAIN, ABHI DIKHEGE NAHI */
     .ad-slot {
-      display: none; /* Baad mein 'block' kar dena */
+      display: none;
       background: #FFFFFF;
       border: 2px dashed #D1D5DB;
       border-radius: 12px;
@@ -483,7 +474,6 @@
       margin-top: 40px;
     }
 
-    /* MOBILE */
     @media (max-width: 900px) {
       .container {
         grid-template-columns: 1fr;
@@ -522,7 +512,7 @@
   </div>
 </header>
 
-<div class="container">
+<main class="container">
 
   <!-- MAIN CONTENT -->
   <div class="main-content">
@@ -532,11 +522,8 @@
       <p>Get bank name, branch, address, city, district, state, MICR, SWIFT details</p>
     </div>
 
-    <!-- AD SLOT #1 - Upar (search ke baad) -->
-    <!-- <div class="ad-slot">Advertisement 728x90</div> -->
-
     <div class="search-box">
-      <input type="text" id="ifscInput" placeholder="Enter IFSC or MICR Code" maxlength="11" autocomplete="off">
+      <input type="text" id="ifscInput" placeholder="Enter IFSC or MICR Code" maxlength="11" autocomplete="off" aria-label="Enter IFSC or MICR Code">
       <button id="searchBtn" type="button" onclick="searchIFSC()">🔍 Search</button>
     </div>
 
@@ -551,7 +538,6 @@
 
     <div id="result"></div>
 
-    <!-- FAQ -->
     <section class="faq-section">
       <h2 class="faq-title">Frequently Asked Questions</h2>
 
@@ -578,24 +564,15 @@
 
   </div>
 
-  <!-- SIDEBAR - NEARBY BRANCHES + AD SLOT -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-
-    <!-- NEARBY BRANCHES CARD -->
     <div class="nearby-card" id="nearbyCard" style="display:none;">
       <div class="nearby-title">🔗 Nearby Branches</div>
       <div id="nearbyList"></div>
     </div>
-
-    <!-- AD SLOT #3 - Sidebar -->
-    <!-- <div class="ad-slot">Advertisement 300x250</div> -->
-
   </aside>
 
-</div>
-
-<!-- AD SLOT #4 - Footer ke upar -->
-<!-- <div class="ad-slot" style="max-width:1100px;margin:0 auto 20px;padding:0 20px;">Advertisement 728x90</div> -->
+</main>
 
 <footer>
   <p>🇮🇳 ToolBharat — IFSC India</p>
@@ -603,7 +580,8 @@
     <a href="index.html" style="color:#2563EB;">Home</a> · 
     <a href="about.html" style="color:#2563EB;">About</a> · 
     <a href="privacy-policy.html" style="color:#2563EB;">Privacy Policy</a> · 
-    <a href="disclaimer.html" style="color:#2563EB;">Disclaimer</a>
+    <a href="disclaimer.html" style="color:#2563EB;">Disclaimer</a> · 
+    <a href="mailto:toolbharat.official@gmail.com" style="color:#2563EB;">Email</a>
   </p>
   <p style="margin-top: 12px; font-size: 12px; color: #6B6B6B;">© 2026 ToolBharat. All rights reserved.</p>
 </footer>
@@ -710,7 +688,7 @@
       <div class="card">
         <div class="ifsc-title">${escapeHTML(code)}</div>
 
-                        <div class="row-grid">
+        <div class="row-grid">
           <div class="info-block">
             <span class="label">🔢 MICR</span>
             <span class="value">${escapeHTML(micr)}</span>
@@ -750,8 +728,6 @@
     `;
 
     resultDiv.innerHTML = html;
-
-    // Load nearby branches into sidebar
     loadNearbyBranches(getBankCode(code), city, code);
   }
 
@@ -938,30 +914,7 @@
     btn.textContent = 'Searching...';
     resultDiv.innerHTML = '<div class="loading"><span class="spinner"></span>Fetching bank branch details...</div>';
 
-    // Hide nearby while loading
     document.getElementById('nearbyCard').style.display = 'none';
 
     try {
       const bankCode = getBankCode(code);
-      const bankData = await loadBankData(bankCode);
-      const data = bankData[code];
-      if (!data) throw new Error('IFSC record not found');
-      renderResult(code, data);
-      updateURL(code);
-      saveRecentSearch(code);
-    } catch (error) {
-      console.error('IFSC Search Error:', error);
-      resultDiv.innerHTML = `<div class="error">❌ IFSC code not found in database.<br><br>Please check the code and try again.</div>`;
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '🔍 Search';
-    }
-  }
-
-  resultDiv.innerHTML = '<div class="info">🔎 Enter an 11-character IFSC code or 9-digit MICR code to find bank branch details.</div>';
-  renderRecentSearches();
-  checkURLForIFSC();
-</script>
-
-</body>
-</html>
